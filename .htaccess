@@ -1,0 +1,17 @@
+# 短链接系统 - Apache 重写规则
+# 启用后可直接访问 /XXXX 跳转（而不需要 /go.php?c=XXXX）
+
+RewriteEngine On
+
+# 如果请求的是真实文件或目录，不重写
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# 将 /XXXX 格式的短码重写到 go.php
+RewriteRule ^([a-zA-Z0-9_-]+)$ go.php?c=$1 [L,QSA]
+
+# 禁止直接访问 data 目录
+<IfModule mod_rewrite.c>
+    RewriteRule ^data/ - [F,L]
+</IfModule>
